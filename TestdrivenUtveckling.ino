@@ -1,18 +1,16 @@
-/* How to use the DHT-22 sensor with Arduino uno
-   Temperature and humidity sensor
-   More info: http://www.ardumotive.com/how-to-use-dht-22-sensor-en.html
-   Dev: Michalis Vasilakis // Date: 1/7/2015 // www.ardumotive.com */
-
-//Libraries
 #include <DHT.h>;
 
-//Constants
-#define DHTPIN 12     // what pin we're connected to
-#define DHTTYPE DHT22   // DHT 22  (AM2302)
-DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
+
+#define DHTPIN 12     
+#define DHTTYPE DHT22   
+#define LED_BLUE 2
+#define LED_YELLOW 3
+#define LED_RED 4
+#define BUTTON 5
+DHT dht(DHTPIN, DHTTYPE); 
 
 
-//Variables
+
 int chk;
 float hum;  //Stores humidity value
 float temp; //Stores temperature value
@@ -21,46 +19,74 @@ void setup()
 {
   Serial.begin(9600);
   dht.begin();
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(BUTTON, INPUT);
 }
 
 void loop()
 {
-    //Read data and store it to variables hum and temp
+    int button_state; 
+    
     hum = dht.readHumidity();
     temp= dht.readTemperature();
-    //Print temp and humidity values to serial monitor
 
-    print_temp(temp);
+    button_state = digitalRead(BUTTON);
 
+    (button_state) ? print_hum(hum) : print_temp(temp);
 
 }
 
 void print_temp(int t){
   
       if (t > 15 && t < 20){
-      digitalWrite(2, HIGH);
-      digitalWrite(3, LOW);
-      digitalWrite(4, LOW);
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, LOW);
+      digitalWrite(LED_RED, LOW);
     }
     else if (t >= 20 && temp < 25 ){
-      digitalWrite(2, HIGH);
-      digitalWrite(3, HIGH);
-      digitalWrite(4, LOW);
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, HIGH);
+      digitalWrite(LED_RED, LOW);
       return 0b110;
       
     }
     else if (t >= 25){
-      digitalWrite(2, HIGH);
-      digitalWrite(3, HIGH);
-      digitalWrite(4, HIGH);
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, HIGH);
+      digitalWrite(LED_RED, HIGH);
     }
     else {
-      digitalWrite(2, LOW);
-      digitalWrite(3, LOW);
-      digitalWrite(4, LOW);
+      digitalWrite(LED_BLUE, LOW);
+      digitalWrite(LED_YELLOW, LOW);
+      digitalWrite(LED_RED, LOW);
+    }
+}
+
+void print_hum(int h){
+  
+      if (h > 45 && h < 50){
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, LOW);
+      digitalWrite(LED_RED, LOW);
+    }
+    else if (h >= 50 && h < 55 ){
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, HIGH);
+      digitalWrite(LED_RED, LOW);
+      return 0b110;
+      
+    }
+    else if (h >= 55){
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, HIGH);
+      digitalWrite(LED_RED, HIGH);
+    }
+    else {
+      digitalWrite(LED_BLUE, LOW);
+      digitalWrite(LED_YELLOW, LOW);
+      digitalWrite(LED_RED, LOW);
     }
 }
    
