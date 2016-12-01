@@ -53,7 +53,7 @@ void led_action( int led){
       digitalWrite(LED_YELLOW, HIGH);
       digitalWrite(LED_RED, LOW);
       break;
-      case3:
+     case 3:
       digitalWrite(LED_BLUE, HIGH);
       digitalWrite(LED_YELLOW, HIGH);
       digitalWrite(LED_RED, HIGH);
