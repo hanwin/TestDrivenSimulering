@@ -28,65 +28,71 @@ void setup()
 void loop()
 {
     int button_state; 
-    
+    int status = 0;
     hum = dht.readHumidity();
     temp= dht.readTemperature();
 
     button_state = digitalRead(BUTTON);
 
-    (button_state) ? print_hum(hum) : print_temp(temp);
+    status = (button_state) ? print_hum(hum) : print_temp(temp);
+    led_action( status);
+    
+   // (button_state) ? print_hum(hum) : print_temp(temp);
 
 }
 
-void print_temp(int t){
-  
-      if (t > 15 && t < 20){
+void led_action( int led){
+  switch(led){
+    case 1:
       digitalWrite(LED_BLUE, HIGH);
       digitalWrite(LED_YELLOW, LOW);
       digitalWrite(LED_RED, LOW);
-    }
-    else if (t >= 20 && temp < 25 ){
+      break;
+     case 2:
       digitalWrite(LED_BLUE, HIGH);
       digitalWrite(LED_YELLOW, HIGH);
       digitalWrite(LED_RED, LOW);
-      return 0b110;
+      break;
+      case3:
+      digitalWrite(LED_BLUE, HIGH);
+      digitalWrite(LED_YELLOW, HIGH);
+      digitalWrite(LED_RED, HIGH);
+      break;
+    default:
+      digitalWrite(LED_BLUE, LOW);
+      digitalWrite(LED_YELLOW, LOW);
+      digitalWrite(LED_RED, LOW);
+      break;
+  }
+}
+int print_temp(int t){
+  int status = 0;
+      if (t > 15 && t < 20){
+      status = 1;
+    }
+    else if (t >= 20 && temp < 25 ){
+      status = 2;
       
     }
     else if (t >= 25){
-      digitalWrite(LED_BLUE, HIGH);
-      digitalWrite(LED_YELLOW, HIGH);
-      digitalWrite(LED_RED, HIGH);
+      status = 3
     }
-    else {
-      digitalWrite(LED_BLUE, LOW);
-      digitalWrite(LED_YELLOW, LOW);
-      digitalWrite(LED_RED, LOW);
-    }
+   return status;
 }
 
-void print_hum(int h){
+int print_hum(int h){
   
+  int status = 0;
       if (h > 45 && h < 50){
-      digitalWrite(LED_BLUE, HIGH);
-      digitalWrite(LED_YELLOW, LOW);
-      digitalWrite(LED_RED, LOW);
+      status = 1;
     }
     else if (h >= 50 && h < 55 ){
-      digitalWrite(LED_BLUE, HIGH);
-      digitalWrite(LED_YELLOW, HIGH);
-      digitalWrite(LED_RED, LOW);
-      return 0b110;
+      status = 2;
       
     }
     else if (h >= 55){
-      digitalWrite(LED_BLUE, HIGH);
-      digitalWrite(LED_YELLOW, HIGH);
-      digitalWrite(LED_RED, HIGH);
+      status = 3;
     }
-    else {
-      digitalWrite(LED_BLUE, LOW);
-      digitalWrite(LED_YELLOW, LOW);
-      digitalWrite(LED_RED, LOW);
-    }
+    return status;
 }
    
