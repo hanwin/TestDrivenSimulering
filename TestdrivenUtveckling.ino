@@ -75,7 +75,7 @@ int print_temp(int t){
       
     }
     else if (t >= 25){
-      status = 3
+      status = 3;
     }
    return status;
 }
